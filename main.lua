@@ -12,9 +12,9 @@ game = {
 
 function love.load()
   game.level.size = { w = love.graphics.getWidth() - PADDING*2, h = love.graphics.getHeight() - PADDING*2 }
-  player:init(game.level.player_start.x+PADDING, game.level.player_start.y+PADDING)
+  player:init(game.level.player_start.x, game.level.player_start.y)
   -- Uncomment to disable joystick TODO: Make this a config option
-  -- love.joystick.close(1)
+  --love.joystick.close(1)
 end
 
 function love.draw()
@@ -41,12 +41,14 @@ function love.draw()
   wall.h = game.level.size.h - wall.y - PATH_WIDTH - game.level.wallThickness
   love.graphics.rectangle("fill", wall.x, wall.y, wall.w, wall.h)
 
-  player:draw()
 
   love.graphics.pop()
+  player:draw()
 end
 
 function love.update(dt)
   player:update(dt)
+  player.x = math.max(0, player.x)
+  player.x = math.min(player.x, love.graphics.getWidth()-player.w)
 end
 

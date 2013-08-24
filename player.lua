@@ -21,7 +21,7 @@ end
 function player:draw()
   love.graphics.push()
   love.graphics.translate(self.x, self.y)
-  love.graphics.translate(self.w/2, self.h/2)
+  love.graphics.translate(self:center().x, self:center().y)
   love.graphics.rotate(self.rotation)
   love.graphics.translate(-self.w/2, -self.h/2)
 
@@ -41,11 +41,9 @@ function player:update(dt)
     local jx = j.getAxis(1, 3)
     local jy = j.getAxis(1, 4)
 
-    local deadzone = 0.25
-    if math.abs(jx) > deadzone then
+    local deadzone = 0.20
+    if math.abs(jx) > deadzone or math.abs(jy) > deadzone then
       self.rx = jx
-    end
-    if math.abs(jy) > deadzone then
       self.ry = jy
     end
     if math.abs(self.vx) < deadzone then
@@ -76,12 +74,21 @@ function player:update(dt)
     else
       self.vy = 0
     end
-
   end
 
   self.rotation = math.atan2(self.ry, self.rx)
   self.xVel = self.vx*self.maxVel
   self.yVel = self.vy*self.maxVel
+
   self.x = self.x + self.xVel
   self.y = self.y + self.yVel
+
+  print("x: "..self.x.." y: "..self.y)
+end
+
+function player:center()
+  return {
+    x = self.x+self.w/2,
+    y = self.y+self.h/2
+  }
 end
