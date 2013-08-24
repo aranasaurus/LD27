@@ -13,6 +13,8 @@ game = {
 function love.load()
   game.level.size = { w = love.graphics.getWidth() - PADDING*2, h = love.graphics.getHeight() - PADDING*2 }
   player:init(game.level.player_start.x+PADDING, game.level.player_start.y+PADDING)
+  -- Uncomment to disable joystick TODO: Make this a config option
+  -- love.joystick.close(1)
 end
 
 function love.draw()

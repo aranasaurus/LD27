@@ -34,7 +34,6 @@ function player:draw()
 end
 
 function player:update(dt)
-  -- TODO: this needs to be a config option
   if love.joystick.isOpen(1) then
     local j = love.joystick
     self.vx = j.getAxis(1, 1)
@@ -56,7 +55,19 @@ function player:update(dt)
       self.vy = 0
     end
   else -- use the keyboard and mouse
+    -- rotate so that we are always facing the mouse pointer
+    local mx, my = love.mouse.getPosition()
+    self.rx = mx - (self.x+self.w/2)
+    self.ry = my - (self.y+self.h/2)
+
     local kb = love.keyboard
+    if kb.isDown("d") then
+      self.vx = 1
+    elseif kb.isDown("a") then
+      self.vx = -1
+    else
+      self.vx = 0
+    end
 
     if kb.isDown("w") then
       self.vy = -1
@@ -66,15 +77,6 @@ function player:update(dt)
       self.vy = 0
     end
 
-    if kb.isDown("a") then
-      self.vx = -1
-    elseif kb.isDown("d") then
-      self.vx = 1
-    else
-      self.vx = 0
-    end
-
-    -- TODO: calculate rotation based on mouse position vs player position
   end
 
   self.rotation = math.atan2(self.ry, self.rx)
