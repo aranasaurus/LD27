@@ -1,5 +1,5 @@
 require("actor")
-player = Actor:new({ color = {0, 105, 15} })
+player = Actor:new({ color = {33, 33, 200} })
 
 function player:init(x, y)
   self.x = x
@@ -28,8 +28,7 @@ function player:update(dt)
   else -- use the keyboard and mouse
     -- rotate so that we are always facing the mouse pointer
     local mx, my = love.mouse.getPosition()
-    self.rx = mx - (self.x+self.w/2)
-    self.ry = my - (self.y+self.h/2)
+    self:facePoint({mx, my})
 
     local kb = love.keyboard
     if kb.isDown("d") then

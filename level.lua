@@ -1,3 +1,4 @@
+require("patrol")
 level = {}
 
 function level:init(w, h)
@@ -18,7 +19,9 @@ function level:init(w, h)
     }
   }
   self.player_start = { x=28, y=35 }
-  self.patrols = {}
+  local p = Patrol:new()
+  p:init(300,400, {{m={300, 100+p.w/2}, l={300,-10000}}, {m={300, 650-p.w/2}, l={300,10000}}}, 1)
+  self.patrols = { p }
 end
 
 function level:draw()
@@ -40,14 +43,21 @@ function level:draw()
       lines.l[3], lines.l[4]
     })
   end
+
+  for _, p in ipairs(self.patrols) do
+    p:draw()
+  end
 end
 
 function level:update(dt)
-  -- Check for perimeter collisions
   self:checkPerimeter(player)
-
-  -- Check for inner wall colisions
   self:checkWalls(player)
+
+  for _, p in ipairs(self.patrols) do
+    p:update(dt)
+    self:checkPerimeter(p)
+    self:checkWalls(p)
+  end
 end
 
 function level:checkPerimeter(a)

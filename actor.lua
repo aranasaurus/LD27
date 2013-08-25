@@ -51,6 +51,27 @@ function Actor:update(dt)
   self.y = self.y + self.yVel
 end
 
+function Actor:faceUp()
+  self.rotation = -90*math.pi/180
+end
+
+function Actor:faceDown()
+  self.rotation = 90*math.pi/180
+end
+
+function Actor:faceRight()
+  self.rotation = 0
+end
+
+function Actor:faceLeft()
+  self.rotation = math.pi
+end
+
+function Actor:facePoint(p)
+  self.rx = p[1] - (self.x + self.w/2)
+  self.ry = p[2] - (self.y + self.h/2)
+end
+
 function Actor:hitBox()
   local pw = self.dw/2
   return {
