@@ -15,7 +15,6 @@ function love.draw()
   love.graphics.translate(PADDING, PADDING)
 
   level:draw()
---  love.graphics.translate(level.wallThickness/2, level.wallThickness/2)
   player:draw()
 end
 
