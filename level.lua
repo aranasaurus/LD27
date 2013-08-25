@@ -43,7 +43,6 @@ function level:draw()
 end
 
 function level:update(dt)
-
   -- Check for perimeter collisions
   self:checkPerimeter(player)
 
