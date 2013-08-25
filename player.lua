@@ -13,17 +13,15 @@ function player:init(x, y)
   self.ry = 0
   self.vx = 0
   self.vy = 0
-  self.body = { 0,0, self.w,0, self.w,self.h, 0,self.h }
-  self.weapon = { self.w+2,self.h/2-10, self.w+5,self.h/2, self.w+2,self.h/2+10 }
+  self.body = { -self.w/2,-self.h/2, self.w/2,-self.h/2, self.w/2,self.h/2, -self.w/2,self.h/2 }
+  self.weapon = { self.w/2+2,-10, self.w/2+5,0, self.w/2+2,10 }
   self.color = { 33, 33, 200 }
 end
 
 function player:draw()
   love.graphics.push()
   love.graphics.translate(self.x, self.y)
-  love.graphics.translate(self:center().x, self:center().y)
   love.graphics.rotate(self.rotation)
-  love.graphics.translate(-self.w/2, -self.h/2)
 
   love.graphics.setColor(self.color)
   love.graphics.polygon("fill", self.body)
@@ -83,7 +81,11 @@ function player:update(dt)
   self.x = self.x + self.xVel
   self.y = self.y + self.yVel
 
-  print("x: "..self.x.." y: "..self.y)
+  local pw = math.max(self.w, self.h)/2
+  self.x = math.max(pw, self.x)
+  self.x = math.min(self.x, game.level.size.w-game.level.wallThickness-pw)
+  self.y = math.max(pw, self.y)
+  self.y = math.min(self.y, game.level.size.h-game.level.wallThickness-pw)
 end
 
 function player:center()
