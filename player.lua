@@ -3,11 +3,12 @@ player = {}
 function player:init(x, y)
   self.x = x
   self.y = y
+  self.w = 16
+  self.h = 60
+  self.dw = math.max(self.w, self.h)
   self.xVel = 0
   self.yVel = 0
   self.maxVel = 6
-  self.w = 16
-  self.h = 50
   self.rotation = 0
   self.rx = 0
   self.ry = 0
@@ -26,6 +27,7 @@ function player:draw()
   love.graphics.setColor(self.color)
   love.graphics.polygon("fill", self.body)
   love.graphics.setColor(255, 0, 0)
+  love.graphics.setLineStyle("smooth")
   love.graphics.setLineWidth(2)
   love.graphics.line(self.weapon)
   love.graphics.pop()
@@ -81,16 +83,20 @@ function player:update(dt)
   self.x = self.x + self.xVel
   self.y = self.y + self.yVel
 
+  -- TODO: I think this can be done more better using level.perimeter
   local pw = math.max(self.w, self.h)/2
-  self.x = math.max(pw, self.x)
-  self.x = math.min(self.x, game.level.size.w-game.level.wallThickness-pw)
-  self.y = math.max(pw, self.y)
-  self.y = math.min(self.y, game.level.size.h-game.level.wallThickness-pw)
+  self.x = math.max(self.x, pw+level.wallThickness/2)
+  self.x = math.min(self.x, level.w-level.wallThickness/2-pw)
+  self.y = math.max(self.y, pw+level.wallThickness/2)
+  self.y = math.min(self.y, level.h-level.wallThickness/2-pw)
 end
 
-function player:center()
+function player:hitBox()
+  local pw = self.dw/2
   return {
-    x = self.x+self.w/2,
-    y = self.y+self.h/2
+    left=self.x-pw,
+    top=self.y-pw,
+    right=self.x+pw,
+    bottom=self.y+pw
   }
 end
