@@ -43,6 +43,24 @@ function level:draw()
 end
 
 function level:update(dt)
+
+  -- Check for perimeter collisions
+  self:checkPerimeter(player)
+
+  -- Check for inner wall colisions
+  self:checkWalls(player)
+end
+
+function level:checkPerimeter(a)
+  -- TODO: I think this can be done more better using level.perimeter
+  local pw = a.dw/2
+  a.x = math.max(a.x, pw+self.wallThickness/2)
+  a.x = math.min(a.x, self.w-self.wallThickness/2-pw)
+  a.y = math.max(a.y, pw+self.wallThickness/2)
+  a.y = math.min(a.y, self.h-self.wallThickness/2-pw)
+end
+
+function level:checkWalls(a)
   local pb = player:hitBox()
   local function checkX(line)
     return (pb.left > line[1] and pb.left < line[#line-1]) or (pb.right > line[1] and pb.right < line[#line-1])
@@ -56,39 +74,40 @@ function level:update(dt)
         if checkX(line) then
           local wy = line[2]
           local dy = pb.bottom - wy
-          if dy > 0 and dy < player.maxVel*2 then
+          if dy > 0 and dy < a.maxVel*2 then
             -- Collision!
-            player.y = wy - player.dw/2
+            a.y = wy - a.dw/2
           end
         end
       elseif facing == 'r' then
         if checkY(line) then
           local wx = line[1]
           local dx = wx - pb.left
-          if dx > 0 and dx < player.maxVel*2 then
+          if dx > 0 and dx < a.maxVel*2 then
             -- Collision!
-            player.x = wx + player.dw/2
+            a.x = wx + a.dw/2
           end
         end
       elseif facing == 'b' then
         if checkX(line) then
           local wy = line[2]
           local dy = wy - pb.top
-          if dy > 0 and dy < player.maxVel*2 then
+          if dy > 0 and dy < a.maxVel*2 then
             -- Collision!
-            player.y = wy + player.dw/2
+            a.y = wy + a.dw/2
           end
         end
       elseif facing == 'l' then
         if checkY(line) then
           local wx = line[1]
           local dx = pb.right - wx
-          if dx > 0 and dx < player.maxVel*2 then
+          if dx > 0 and dx < a.maxVel*2 then
             -- Collision!
-            player.x = wx - player.dw/2
+            a.x = wx - a.dw/2
           end
         end
       end
     end
   end
 end
+

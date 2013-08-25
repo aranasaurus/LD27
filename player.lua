@@ -83,12 +83,6 @@ function player:update(dt)
   self.x = self.x + self.xVel
   self.y = self.y + self.yVel
 
-  -- TODO: I think this can be done more better using level.perimeter
-  local pw = math.max(self.w, self.h)/2
-  self.x = math.max(self.x, pw+level.wallThickness/2)
-  self.x = math.min(self.x, level.w-level.wallThickness/2-pw)
-  self.y = math.max(self.y, pw+level.wallThickness/2)
-  self.y = math.min(self.y, level.h-level.wallThickness/2-pw)
 end
 
 function player:hitBox()

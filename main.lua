@@ -1,5 +1,6 @@
 require("player")
 require("level")
+
 PADDING = 16
 PATH_WIDTH = 66
 
